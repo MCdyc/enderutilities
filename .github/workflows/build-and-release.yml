@@ -1,0 +1,73 @@
+name: Build and Release
+
+on:
+  push:
+    branches:
+      - master
+    tags:
+      - '*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build Cleanroom jar
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build
+        run: ./gradlew build --no-daemon --console=plain --stacktrace
+
+      - name: Collect release jars
+        shell: bash
+        run: |
+          mkdir -p release
+          cp build/libs/*_cleanroom.jar release/
+          cp build/libs/*_cleanroom-sources.jar release/
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: enderutilities-cleanroom
+          path: release/*.jar
+          if-no-files-found: error
+
+      - name: Publish latest prerelease
+        if: github.ref == 'refs/heads/master' || github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete cleanroom-latest --yes --cleanup-tag || true
+          gh release create cleanroom-latest release/*.jar \
+            --target "${GITHUB_SHA}" \
+            --title "Ender Utilities Cleanroom latest" \
+            --notes "Cleanroom Loader specific build of Ender Utilities for Minecraft 1.12.2. Built automatically from ${GITHUB_SHA}." \
+            --prerelease
+
+      - name: Publish tagged release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release upload "${GITHUB_REF_NAME}" release/*.jar --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" release/*.jar \
+              --title "Ender Utilities ${GITHUB_REF_NAME}" \
+              --notes "Cleanroom Loader specific build of Ender Utilities for Minecraft 1.12.2." \
+              --latest
+          fi

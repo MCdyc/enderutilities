@@ -1,56 +1,80 @@
-[![Curseforge](http://cf.way2muchnoise.eu/full_ender-utilities_downloads.svg)](https://minecraft.curseforge.com/projects/ender-utilities) [![Curseforge](http://cf.way2muchnoise.eu/versions/For%20MC_ender-utilities_all.svg)](https://minecraft.curseforge.com/projects/ender-utilities)
+# Ender Utilities Cleanroom
 
-## Ender Utilities
+This repository is a Cleanroom Loader specific port of Ender Utilities for Minecraft 1.12.2.
 
-Ender Utilities is an "ender-themed" Minecraft mod, which adds various different items and blocks.
-Many of them are related to storing or transporting items or player and mob teleportation.
+It keeps the original Ender Utilities source, resources, author metadata, and LGPL license terms while replacing the legacy ForgeGradle 2 build with the CleanroomModTemplate Gradle 9 / Unimined setup. This branch is intended for Cleanroom builds only; use the original upstream project for non-Cleanroom releases.
 
-Ender Utilities was started during Modjam 4, a Minecraft modding competition/event, back in May 2014.
+## Cleanroom Build
 
-This branch ports the project build environment to [Cleanroom Loader](https://cleanroommc.com/) using the [CleanroomModTemplate](https://github.com/CleanroomMC/CleanroomModTemplate) Gradle/Unimined setup while keeping the original Ender Utilities source, resources, author metadata, and LGPL license terms.
+Key build details:
 
-For compiled original builds (= downloads), see:
-* CurseForge: https://minecraft.curseforge.com/projects/ender-utilities
-
-## Cleanroom migration
-
-Cleanroom Loader is a modern Forge fork for Minecraft 1.12.2. This project now uses the Cleanroom template's Gradle 9 / Unimined build instead of the old ForgeGradle 2 setup.
-
-Notable migration details:
-* Java toolchain: Java 25
 * Minecraft: 1.12.2
-* Mappings: MCP stable 39
 * Cleanroom Loader: 0.5.14-alpha
-* Access transformer: `src/main/resources/enderutilities_at.cfg`, written in MCP names for Unimined remapping
-* Mod dependencies:
-  * JEI from Modrinth Maven: `maven.modrinth:jei`
-  * Baubles from Cleanroom CurseMaven: `curse.maven:baubles-227083`
-  * Chisels & Bits from Cleanroom CurseMaven: `curse.maven:chisels-bits-231095`
+* Java toolchain: Java 25
+* Mappings: MCP stable 39
+* Version suffix: `_cleanroom`
+* Access transformer: `src/main/resources/enderutilities_at.cfg`, written in MCP names and remapped by Unimined
+
+The current Gradle version is published as `0.7.15_cleanroom`, producing jars such as:
+
+* `enderutilities-1.12.2-0.7.15_cleanroom.jar`
+* `enderutilities-1.12.2-0.7.15_cleanroom-sources.jar`
+
+## Dependencies
+
+The Cleanroom build uses Maven dependencies suitable for automated builds:
+
+* JEI: `maven.modrinth:jei`
+* Baubles: `curse.maven:baubles-227083`
+* Chisels & Bits: `curse.maven:chisels-bits-231095`
 
 ## Compiling
 
-* Install a Java 25 JDK.
-* Clone the repository.
-* Open a command prompt/terminal to the repository directory.
-* Run `gradlew build` to build the mod.
-* The remapped jar is produced under `build/libs/`.
+Install a Java 25 JDK, then run:
 
-In IntelliJ IDEA, import the Gradle project and use the generated Gradle run configurations, especially `2. Run Client` and `3. Run Server`.
+```bash
+./gradlew build
+```
 
-## License and attribution
+On Windows:
+
+```bat
+gradlew.bat build
+```
+
+The remapped Cleanroom jar is written to `build/libs/`.
+
+## GitHub Builds
+
+GitHub Actions builds the project automatically on pushes to `master`, tag pushes, and manual workflow dispatch.
+
+* Every build uploads the compiled jars as workflow artifacts.
+* Pushes to `master` and manual runs update the prerelease `cleanroom-latest`.
+* Tag pushes create a GitHub Release for that tag.
+
+## Original Project
+
+Ender Utilities is an ender-themed Minecraft mod by masa, originally started during Modjam 4 in May 2014. It adds items and blocks related to item storage, item transport, and player/mob teleportation.
+
+Original downloads and project page:
+
+* CurseForge: https://minecraft.curseforge.com/projects/ender-utilities
+* Original update JSON: https://raw.githubusercontent.com/maruohon/enderutilities/master/update.json
+
+## License And Attribution
 
 Ender Utilities source code and resources remain licensed under the GNU Lesser General Public License v3 as provided in `LICENSE.txt`. The original mod author metadata is preserved as `masa` in `mcmod.info`.
 
-The Cleanroom build skeleton is based on CleanroomMC/CleanroomModTemplate, copyright (c) 2025 kappa-maintainer, licensed under the MIT License. The template license is preserved in `LICENSE-CleanroomModTemplate.txt`.
+The Cleanroom build skeleton is based on [CleanroomMC/CleanroomModTemplate](https://github.com/CleanroomMC/CleanroomModTemplate), copyright (c) 2025 kappa-maintainer, licensed under the MIT License. The template license is preserved in `LICENSE-CleanroomModTemplate.txt`.
 
 ## YourKit
 
 ![](https://www.yourkit.com/images/yklogo.png)
 
-We appreciate YourKit for providing the project developers licenses of its profiler to help us improve performance!
+We appreciate YourKit for providing the project developers licenses of its profiler to help us improve performance.
 
-YourKit supports open source projects with innovative and intelligent tools
-for monitoring and profiling Java and .NET applications.
-YourKit is the creator of [YourKit Java Profiler](https://www.yourkit.com/java/profiler/),
-[YourKit .NET Profiler](https://www.yourkit.com/.net/profiler/) and
-[YourKit YouMonitor](https://www.yourkit.com/youmonitor), tools for profiling Java and .NET applications.
+YourKit supports open source projects with tools for monitoring and profiling Java and .NET applications:
+
+* [YourKit Java Profiler](https://www.yourkit.com/java/profiler/)
+* [YourKit .NET Profiler](https://www.yourkit.com/.net/profiler/)
+* [YourKit YouMonitor](https://www.yourkit.com/youmonitor)
