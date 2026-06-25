@@ -30,6 +30,7 @@ import fi.dy.masa.enderutilities.network.PacketHandler;
 import fi.dy.masa.enderutilities.network.message.MessageGuiAction;
 import fi.dy.masa.enderutilities.reference.ReferenceGuiIds;
 import fi.dy.masa.enderutilities.tileentity.TileEntitySoundBlock;
+import fi.dy.masa.enderutilities.util.InputUtils;
 
 public class GuiSoundBlock extends GuiEnderUtilities implements IButtonStateCallback
 {
@@ -234,7 +235,7 @@ public class GuiSoundBlock extends GuiEnderUtilities implements IButtonStateCall
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth - this.guiLeft;
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1 - this.guiTop;
 
-        if (Mouse.getEventDWheel() != 0 &&
+        if (InputUtils.getMouseWheelSteps(Mouse.getEventDWheel()) != 0 &&
             (this.areaSoundList.isMouseOver(mouseX, mouseY) || this.scrollBar.isMouseOver(mouseX, mouseY)))
         {
             this.scrollBar.handleMouseInput(mouseX, mouseY);

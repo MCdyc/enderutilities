@@ -6,6 +6,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import fi.dy.masa.enderutilities.util.InputUtils;
 
 public class ScrollBar extends GuiArea
 {
@@ -142,7 +143,7 @@ public class ScrollBar extends GuiArea
         int y = this.getY();
         int w = this.getWidth();
         int h = this.getHeight();
-        int dWheel = Mouse.getEventDWheel();
+        int wheelSteps = InputUtils.getMouseWheelSteps(Mouse.getEventDWheel());
 
         if (Mouse.isButtonDown(0) == false)
         {
@@ -186,9 +187,9 @@ public class ScrollBar extends GuiArea
                 return true;
             }
         }
-        else if (dWheel != 0)
+        else if (wheelSteps != 0)
         {
-            return this.move(dWheel < 0 ? 1 : -1, false);
+            return this.move(-wheelSteps, false);
         }
 
         return false;

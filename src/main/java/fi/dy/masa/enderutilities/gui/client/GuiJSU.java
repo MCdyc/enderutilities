@@ -13,6 +13,7 @@ import fi.dy.masa.enderutilities.network.PacketHandler;
 import fi.dy.masa.enderutilities.network.message.MessageGuiAction;
 import fi.dy.masa.enderutilities.reference.ReferenceGuiIds;
 import fi.dy.masa.enderutilities.tileentity.TileEntityJSU;
+import fi.dy.masa.enderutilities.util.InputUtils;
 
 public class GuiJSU extends GuiContainerLargeStacks
 {
@@ -53,7 +54,7 @@ public class GuiJSU extends GuiContainerLargeStacks
         int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth - this.guiLeft;
         int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1 - this.guiTop;
 
-        if (Mouse.getEventDWheel() != 0 && this.areaInventory.isMouseOver(mouseX, mouseY))
+        if (InputUtils.getMouseWheelSteps(Mouse.getEventDWheel()) != 0 && this.areaInventory.isMouseOver(mouseX, mouseY))
         {
             this.scrollBar.handleMouseInput(mouseX, mouseY);
         }

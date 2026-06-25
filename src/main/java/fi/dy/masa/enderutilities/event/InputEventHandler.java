@@ -1,7 +1,6 @@
 package fi.dy.masa.enderutilities.event;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,6 +33,7 @@ import fi.dy.masa.enderutilities.registry.EnderUtilitiesItems;
 import fi.dy.masa.enderutilities.registry.Keybindings;
 import fi.dy.masa.enderutilities.tileentity.TileEntityEnderUtilities;
 import fi.dy.masa.enderutilities.util.EntityUtils;
+import fi.dy.masa.enderutilities.util.InputUtils;
 import fi.dy.masa.enderutilities.util.InventoryUtils;
 import it.unimi.dsi.fastutil.ints.Int2LongOpenHashMap;
 
@@ -105,12 +105,10 @@ public class InputEventHandler
     @SubscribeEvent
     public void onMouseEvent(MouseEvent event)
     {
-        int dWheel = event.getDwheel();
+        int dWheel = InputUtils.getMouseWheelSteps(event.getDwheel());
 
         if (dWheel != 0)
         {
-            dWheel /= 120;
-
             // If the player pressed down a modifier key while holding an IKeyBound item
             // (note: this means it specifically WON'T work if the player started pressing a modifier
             // key while holding something else, for example when scrolling through the hotbar!!),
@@ -138,7 +136,7 @@ public class InputEventHandler
                 }
             }
         }
-        else if (this.onInputEvent(Mouse.getEventButton() - 100, Mouse.getEventButtonState()))
+        else if (this.onInputEvent(event.getButton() - 100, event.isButtonstate()))
         {
             event.setCanceled(true);
         }

@@ -35,6 +35,7 @@ import fi.dy.masa.enderutilities.network.message.MessageGuiAction;
 import fi.dy.masa.enderutilities.reference.HotKeys;
 import fi.dy.masa.enderutilities.reference.ReferenceGuiIds;
 import fi.dy.masa.enderutilities.reference.ReferenceTextures;
+import fi.dy.masa.enderutilities.util.InputUtils;
 import fi.dy.masa.enderutilities.util.InventoryUtils;
 
 @Mod.EventBusSubscriber(Side.CLIENT)
@@ -203,9 +204,9 @@ public class GuiEnderUtilities extends GuiContainer
     @Override
     public void handleMouseInput() throws IOException
     {
-        int dWheel = Mouse.getEventDWheel();
+        int wheelSteps = InputUtils.getMouseWheelSteps(Mouse.getEventDWheel());
 
-        if (dWheel != 0)
+        if (wheelSteps != 0)
         {
             int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
             int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
@@ -216,7 +217,14 @@ public class GuiEnderUtilities extends GuiContainer
 
                 if (button.mousePressed(this.mc, mouseX, mouseY))
                 {
-                    this.actionPerformedWithButton(button, 10 + dWheel / 120);
+                    int mouseButton = wheelSteps > 0 ? 11 : 9;
+                    int count = Math.abs(wheelSteps);
+
+                    for (int j = 0; j < count; j++)
+                    {
+                        this.actionPerformedWithButton(button, mouseButton);
+                    }
+
                     break;
                 }
             }
@@ -251,7 +259,7 @@ public class GuiEnderUtilities extends GuiContainer
     }
 
     /**
-     * Called when a mouse action is performed. Wheel actions have a value (dWheel / 120) + 10.
+     * Called when a mouse action is performed. Wheel up/down actions have values 11 and 9.
      * @param guiButton
      * @param mouseButton
      * @throws IOException
